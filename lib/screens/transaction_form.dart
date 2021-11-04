@@ -137,27 +137,31 @@ class _TransactionFormState extends State<TransactionForm> {
         .save(transactionCreated, password)
         .catchError((e) {
 
-      FirebaseCrashlytics.instance.setCustomKey('exception', e.toString());
-      FirebaseCrashlytics.instance.setCustomKey('Http_code', e.statusCode);
-      FirebaseCrashlytics.instance.setCustomKey('Http_body', transactionCreated.toString());
-      FirebaseCrashlytics.instance.recordError(e.message, null);
+          if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+        FirebaseCrashlytics.instance.setCustomKey('exception', e.toString());
+        FirebaseCrashlytics.instance.setCustomKey('Http_body', transactionCreated.toString());
+        FirebaseCrashlytics.instance.recordError(e.message, null);
+      }
 
       _showFailureMessage(context, message: e.message);
     }, test: (e) => e is HttpException).catchError((e) {
 
-      FirebaseCrashlytics.instance.setCustomKey('exception', e.toString());
-      FirebaseCrashlytics.instance.setCustomKey('Http_code', e.statusCode);
-      FirebaseCrashlytics.instance.setCustomKey('Http_body', transactionCreated.toString());
-      FirebaseCrashlytics.instance.recordError(e.message, null);
+      if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+        FirebaseCrashlytics.instance.setCustomKey('exception', e.toString());
+        FirebaseCrashlytics.instance.setCustomKey('Http_code', e.statusCode);
+        FirebaseCrashlytics.instance.setCustomKey('Http_body', transactionCreated.toString());
+        FirebaseCrashlytics.instance.recordError(e.message, null);
+      }
 
       _showFailureMessage(context,
           message: 'timeout submitting the transaction');
     }, test: (e) => e is TimeoutException).catchError((e) {
 
-      FirebaseCrashlytics.instance.setCustomKey('exception', e.toString());
-      FirebaseCrashlytics.instance.setCustomKey('Http_code', e.statusCode);
-      FirebaseCrashlytics.instance.setCustomKey('Http_body', transactionCreated.toString());
-      FirebaseCrashlytics.instance.recordError(e.message, null);
+      if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+        FirebaseCrashlytics.instance.setCustomKey('exception', e.toString());
+        FirebaseCrashlytics.instance.setCustomKey('Http_body', transactionCreated.toString());
+        FirebaseCrashlytics.instance.recordError(e.message, null);
+      }
 
       _showFailureMessage(context);
     }).whenComplete(() {
