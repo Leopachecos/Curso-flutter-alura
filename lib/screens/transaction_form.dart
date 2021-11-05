@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:bytebank_curso2/components/Progress.dart';
 import 'package:bytebank_curso2/components/TransactionAuthDialog.dart';
 import 'package:bytebank_curso2/components/response_dialog.dart';
@@ -136,30 +135,30 @@ class _TransactionFormState extends State<TransactionForm> {
     final Transaction transaction = await _transactionWebClient
         .save(transactionCreated, password)
         .catchError((e) {
-
-          if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
+      if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
         FirebaseCrashlytics.instance.setCustomKey('exception', e.toString());
-        FirebaseCrashlytics.instance.setCustomKey('Http_body', transactionCreated.toString());
+        FirebaseCrashlytics.instance
+            .setCustomKey('Http_body', transactionCreated.toString());
         FirebaseCrashlytics.instance.recordError(e.message, null);
       }
 
       _showFailureMessage(context, message: e.message);
     }, test: (e) => e is HttpException).catchError((e) {
-
       if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
         FirebaseCrashlytics.instance.setCustomKey('exception', e.toString());
         FirebaseCrashlytics.instance.setCustomKey('Http_code', e.statusCode);
-        FirebaseCrashlytics.instance.setCustomKey('Http_body', transactionCreated.toString());
+        FirebaseCrashlytics.instance
+            .setCustomKey('Http_body', transactionCreated.toString());
         FirebaseCrashlytics.instance.recordError(e.message, null);
       }
 
       _showFailureMessage(context,
           message: 'timeout submitting the transaction');
     }, test: (e) => e is TimeoutException).catchError((e) {
-
       if (FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
         FirebaseCrashlytics.instance.setCustomKey('exception', e.toString());
-        FirebaseCrashlytics.instance.setCustomKey('Http_body', transactionCreated.toString());
+        FirebaseCrashlytics.instance
+            .setCustomKey('Http_body', transactionCreated.toString());
         FirebaseCrashlytics.instance.recordError(e.message, null);
       }
 

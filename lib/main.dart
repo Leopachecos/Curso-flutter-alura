@@ -1,18 +1,11 @@
+import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'screens/dashboard_inicial.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 
-// import 'package:firebase_core';
-// import 'package:firebase_crashlytics';
-// import 'package:firebase_core_platform_interface';
-// import 'package:quiver';
-// import 'package:firebase_crashlytics_platform_interface';
-// import 'package:plugin_platform_interface';
-
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
@@ -24,7 +17,12 @@ void main() async {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   }
 
-  runApp(BytebankApp());
+  runZonedGuarded<Future<void>>(() async {
+    runApp(BytebankApp());
+  },
+      FirebaseCrashlytics.instance
+          .recordError); //Zona de erro onde, já que o firebase não consegue
+  //analisar erros do dart por estarem acima dele, com a zona o runApp cuida disso
 }
 
 class BytebankApp extends StatelessWidget {
